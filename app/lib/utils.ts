@@ -67,3 +67,27 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+/**
+ * Accepts a function and the number of milliseconds and delays the execution of that function by the specified number
+ * @param mainFunction The function to debounce
+ * @param delay The delay in ms
+ */
+export const debounce = (
+  mainFunction: (...args: unknown[]) => void,
+  delay: number,
+) => {
+  // Declare a variable called 'timer' to store the timer ID
+  let timer: NodeJS.Timeout;
+
+  // Return an anonymous function that takes in any number of arguments
+  return function (...args: unknown[]) {
+    // Clear the previous timer to prevent the execution of 'mainFunction'
+    clearTimeout(timer);
+
+    // Set a new timer that will execute 'mainFunction' after the specified delay
+    timer = setTimeout(() => {
+      mainFunction(...args);
+    }, delay);
+  };
+};
