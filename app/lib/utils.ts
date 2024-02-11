@@ -74,7 +74,7 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
  * @param delay The delay in ms
  */
 export const debounce = (
-  mainFunction: (...args: unknown[]) => void,
+  mainFunction: (...args: any[]) => void,
   delay: number,
 ) => {
   // Declare a variable called 'timer' to store the timer ID
