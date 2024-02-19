@@ -13,6 +13,7 @@ const FormSchema = z.object({
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
 export async function createInvoice(formData: FormData) {
   //validate the form data
@@ -33,6 +34,25 @@ export async function createInvoice(formData: FormData) {
 
   //data changed on the route, revalidate client cached route
   //Once the database has been updated, the /dashboard/invoices path will be revalidated, and fresh data will be fetched from the server.
+
+  revalidatePath('/dashboard/invoices');
+  redirect('/dashboard/invoices');
+}
+
+export async function updateInvoice(id: string, formData: FormData) {
+  const { customerId, amount, status } = UpdateInvoice.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+
+  const amountInCents = amount * 100;
+
+  await sql`
+    UPDATE invoices
+    SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+    WHERE id = ${id}
+  `;
 
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
