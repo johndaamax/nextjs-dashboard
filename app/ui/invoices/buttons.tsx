@@ -1,5 +1,6 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { deleteInvoice } from '@/app/lib/actions';
 
 export function CreateInvoice() {
   return (
@@ -25,12 +26,18 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 export function DeleteInvoice({ id }: { id: string }) {
+  // Using the function approach instead of binding gives the following error
+  // Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server".
+
+  //const deleteInvoiceWithId = () => deleteInvoice(id);
+
+  const deleteInvoiceWithId = deleteInvoice.bind(null, id);
   return (
-    <>
+    <form action={deleteInvoiceWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
+        <TrashIcon className="w-4" />
       </button>
-    </>
+    </form>
   );
 }
